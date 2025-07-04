@@ -67,7 +67,7 @@ export default function Mission() {
           {items.map((item, index) => (
             <div
               key={index}
-              ref={el => cardRefs.current[index] = el}
+              ref={el => {cardRefs.current[index] = el}}
               className={`bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-700 ease-out ${
                 visibleCards[index]
                   ? 'opacity-100 blur-0 translate-y-0'

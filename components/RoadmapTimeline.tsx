@@ -330,7 +330,7 @@ export default function RoadmapTimeline({ selectedRoadmap }: RoadmapTimelineProp
                   {/* Content */}
                   <div className={`ml-16 md:ml-0 md:w-1/2 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}`}>
                     <div 
-                      ref={el => itemRefs.current[index] = el}
+                      ref={el => {itemRefs.current[index] = el}}
                       className={`bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-out ${
                         visibleItems[index]
                           ? 'opacity-100 blur-0 translate-y-0'

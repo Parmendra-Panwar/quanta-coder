@@ -93,7 +93,7 @@ export default function WhyJoin() {
               {benefits.map((benefit, index) => (
                 <div 
                   key={index} 
-                  ref={el => benefitRefs.current[index] = el}
+                  ref={el => {benefitRefs.current[index] = el}}
                   className={`flex items-start space-x-4 transition-all duration-700 ease-out ${
                     visibleBenefits[index]
                       ? 'opacity-100 blur-0 translate-x-0'

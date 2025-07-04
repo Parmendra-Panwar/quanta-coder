@@ -94,7 +94,7 @@ export default function Members() {
           {members.map((member, index) => (
             <div
               key={index}
-              ref={el => cardRefs.current[index] = el}
+              ref={el => {cardRefs.current[index] = el}}
               className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-700 ease-out group ${
                 visibleCards[index]
                   ? 'opacity-100 blur-0 translate-y-0'

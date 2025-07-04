@@ -72,7 +72,7 @@ export default function Features() {
           {features.map((feature, index) => (
             <div
               key={index}
-              ref={el => cardRefs.current[index] = el}
+              ref={el => {cardRefs.current[index] = el}}
               className={`text-center p-6 rounded-xl bg-gradient-to-br from-purple-50 to-blue-50 hover:shadow-lg transition-all duration-700 ease-out ${
                 visibleCards[index]
                   ? 'opacity-100 blur-0 translate-y-0'
