@@ -1,9 +1,19 @@
-import { ArrowLeft, Calendar, Clock, Link, MapPin, Share2, Star, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  Link,
+  MapPin,
+  Share2,
+  Star,
+  Users,
+} from "lucide-react";
 import events from "./events";
 
-export type Params = {
-  slug: string;
-};
+// Params type
+type Params = { slug: string };
+
+// Required for static export
 export async function generateStaticParams(): Promise<Params[]> {
   return [
     { slug: "react-workshop-2024" },
@@ -12,8 +22,13 @@ export async function generateStaticParams(): Promise<Params[]> {
   ];
 }
 
-export default async function EventPage({ params }: { params: Params }) {
-  const eventId = params.slug;
+// 🛠️ No need to import PageProps or any Next types
+export default async function EventPage({
+  params,
+}: {
+  params: Params;
+}) {
+  const { slug: eventId } = params;
   const event = events[eventId as keyof typeof events];
 
   if (!event) {
