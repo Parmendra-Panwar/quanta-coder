@@ -1,13 +1,4 @@
-import {
-  ArrowLeft,
-  Calendar,
-  Clock,
-  Link,
-  MapPin,
-  Share2,
-  Star,
-  Users,
-} from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Link, MapPin, Share2, Star, Users } from "lucide-react";
 import events from "./events";
 
 // Params type
@@ -22,13 +13,13 @@ export async function generateStaticParams(): Promise<Params[]> {
   ];
 }
 
-// 🛠️ No need to import PageProps or any Next types
+// ✅ Treat params as Promise!
 export default async function EventPage({
   params,
 }: {
-  params: Params;
+  params: Promise<Params>;
 }) {
-  const { slug: eventId } = params;
+  const { slug: eventId } = await params; // Await now required
   const event = events[eventId as keyof typeof events];
 
   if (!event) {
