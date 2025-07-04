@@ -48,19 +48,34 @@ export default function Header() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <div className="relative w-6 h-6">
+              <span className={`absolute block h-0.5 w-6 bg-gray-600 transform transition-all duration-300 ease-in-out ${
+                isMenuOpen ? 'rotate-45 translate-y-2.5' : 'translate-y-0'
+              }`}></span>
+              <span className={`absolute block h-0.5 w-6 bg-gray-600 transform transition-all duration-300 ease-in-out ${
+                isMenuOpen ? 'opacity-0' : 'translate-y-2'
+              }`}></span>
+              <span className={`absolute block h-0.5 w-6 bg-gray-600 transform transition-all duration-300 ease-in-out ${
+                isMenuOpen ? '-rotate-45 translate-y-2.5' : 'translate-y-4'
+              }`}></span>
+            </div>
           </button>
         </div>
 
         {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          <div className="py-4 border-t border-gray-200">
             <nav className="flex flex-col space-y-4">
-              {navigation.map((item) => (
+              {navigation.map((item, index) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-gray-700 hover:text-purple-600 font-medium transition-colors px-4 py-2 rounded-lg hover:bg-purple-50"
+                  className={`text-gray-700 hover:text-purple-600 font-medium transition-all duration-300 px-4 py-2 rounded-lg hover:bg-purple-50 transform ${
+                    isMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
+                  }`}
+                  style={{ transitionDelay: `${index * 50}ms` }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
@@ -68,7 +83,7 @@ export default function Header() {
               ))}
             </nav>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );

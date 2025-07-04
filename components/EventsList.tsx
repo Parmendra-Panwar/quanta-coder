@@ -1,6 +1,12 @@
+'use client';
+
+import { useEffect, useState, useRef } from 'react';
 import { Calendar, Award, Users, Code } from 'lucide-react';
 
 export default function EventsList() {
+  const [visibleCards, setVisibleCards] = useState<boolean[]>([]);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const pastEvents = [
     {
       title: 'JavaScript Fundamentals',
@@ -36,6 +42,32 @@ export default function EventsList() {
     },
   ];
 
+  useEffect(() => {
+    const observers = cardRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleCards(prev => {
+              const newVisible = [...prev];
+              newVisible[index] = true;
+              return newVisible;
+            });
+          }
+        },
+        { threshold: 0.3 }
+      );
+
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,7 +82,16 @@ export default function EventsList() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {pastEvents.map((event, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+            <div 
+              key={index} 
+              ref={el => cardRefs.current[index] = el}
+              className={`bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-out ${
+                visibleCards[index]
+                  ? 'opacity-100 blur-0 translate-y-0'
+                  : 'opacity-0 blur-sm translate-y-8'
+              }`}
+              style={{ transitionDelay: `${index * 150}ms` }}
+            >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-gray-900">{event.title}</h3>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${

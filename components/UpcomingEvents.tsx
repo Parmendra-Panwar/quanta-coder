@@ -1,8 +1,16 @@
+'use client';
+
+import { useEffect, useState, useRef } from 'react';
+import Link from 'next/link';
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 
 export default function UpcomingEvents() {
+  const [visibleCards, setVisibleCards] = useState<boolean[]>([]);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const upcomingEvents = [
     {
+      id: 'react-workshop-2024',
       title: 'React Workshop',
       date: 'March 15, 2024',
       time: '2:00 PM - 5:00 PM',
@@ -13,6 +21,7 @@ export default function UpcomingEvents() {
       image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&dpr=1',
     },
     {
+      id: 'coding-bootcamp-2024',
       title: 'Coding Bootcamp',
       date: 'March 22, 2024',
       time: '10:00 AM - 4:00 PM',
@@ -23,6 +32,7 @@ export default function UpcomingEvents() {
       image: 'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&dpr=1',
     },
     {
+      id: 'ai-ml-hackathon-2024',
       title: 'AI/ML Hackathon',
       date: 'March 29, 2024',
       time: '9:00 AM - 9:00 PM',
@@ -33,6 +43,32 @@ export default function UpcomingEvents() {
       image: 'https://images.pexels.com/photos/3184293/pexels-photo-3184293.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&dpr=1',
     },
   ];
+
+  useEffect(() => {
+    const observers = cardRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleCards(prev => {
+              const newVisible = [...prev];
+              newVisible[index] = true;
+              return newVisible;
+            });
+          }
+        },
+        { threshold: 0.3 }
+      );
+
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
 
   return (
     <section id="events" className="py-16 bg-white">
@@ -48,7 +84,16 @@ export default function UpcomingEvents() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {upcomingEvents.map((event, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <div 
+              key={index} 
+              ref={el => cardRefs.current[index] = el}
+              className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-700 ease-out ${
+                visibleCards[index]
+                  ? 'opacity-100 blur-0 translate-y-0'
+                  : 'opacity-0 blur-sm translate-y-8'
+              }`}
+              style={{ transitionDelay: `${index * 200}ms` }}
+            >
               <div className="relative">
                 <img
                   src={event.image}
@@ -83,9 +128,17 @@ export default function UpcomingEvents() {
                   </div>
                 </div>
                 
-                <button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300">
-                  Register Now
-                </button>
+                <div className="flex space-x-2">
+                  <Link
+                    href={`/events/${event.id}`}
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300 text-center"
+                  >
+                    View Details
+                  </Link>
+                  <button className="flex-1 border border-purple-600 text-purple-600 font-semibold py-2 px-4 rounded-lg hover:bg-purple-50 transition-all duration-300">
+                    Register
+                  </button>
+                </div>
               </div>
             </div>
           ))}

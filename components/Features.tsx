@@ -1,6 +1,12 @@
+'use client';
+
+import { useEffect, useState, useRef } from 'react';
 import { Code, Users, Trophy, BookOpen } from 'lucide-react';
 
 export default function Features() {
+  const [visibleCards, setVisibleCards] = useState<boolean[]>([]);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const features = [
     {
       icon: Code,
@@ -24,6 +30,32 @@ export default function Features() {
     },
   ];
 
+  useEffect(() => {
+    const observers = cardRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleCards(prev => {
+              const newVisible = [...prev];
+              newVisible[index] = true;
+              return newVisible;
+            });
+          }
+        },
+        { threshold: 0.3 }
+      );
+
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
+
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,7 +72,13 @@ export default function Features() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="text-center p-6 rounded-xl bg-gradient-to-br from-purple-50 to-blue-50 hover:shadow-lg transition-shadow duration-300"
+              ref={el => cardRefs.current[index] = el}
+              className={`text-center p-6 rounded-xl bg-gradient-to-br from-purple-50 to-blue-50 hover:shadow-lg transition-all duration-700 ease-out ${
+                visibleCards[index]
+                  ? 'opacity-100 blur-0 translate-y-0'
+                  : 'opacity-0 blur-sm translate-y-8'
+              }`}
+              style={{ transitionDelay: `${index * 150}ms` }}
             >
               <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
                 <feature.icon className="w-8 h-8 text-white" />

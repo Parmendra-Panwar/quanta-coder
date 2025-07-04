@@ -1,6 +1,12 @@
+'use client';
+
+import { useEffect, useState, useRef } from 'react';
 import { Github, Linkedin, Mail } from 'lucide-react';
 
 export default function Members() {
+  const [visibleCards, setVisibleCards] = useState<boolean[]>([]);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const members = [
     {
       name: 'Alex Johnson',
@@ -46,6 +52,32 @@ export default function Members() {
     },
   ];
 
+  useEffect(() => {
+    const observers = cardRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleCards(prev => {
+              const newVisible = [...prev];
+              newVisible[index] = true;
+              return newVisible;
+            });
+          }
+        },
+        { threshold: 0.3 }
+      );
+
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
+
   return (
     <section id="team" className="py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,7 +94,13 @@ export default function Members() {
           {members.map((member, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
+              ref={el => cardRefs.current[index] = el}
+              className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-700 ease-out group ${
+                visibleCards[index]
+                  ? 'opacity-100 blur-0 translate-y-0'
+                  : 'opacity-0 blur-sm translate-y-8'
+              }`}
+              style={{ transitionDelay: `${index * 150}ms` }}
             >
               <div className="relative">
                 <img

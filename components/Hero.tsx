@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
@@ -20,14 +23,27 @@ export default function Hero({
   imageSrc,
   imageAlt,
 }: HeroProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <section className="relative pt-20 pb-16 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-blue-50"></div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Content */}
-          <div className="text-center lg:text-left">
+          {/* Content - Slides in from left */}
+          <div className={`text-center lg:text-left transition-all duration-1000 ease-out ${
+            isLoaded 
+              ? 'translate-x-0 opacity-100' 
+              : '-translate-x-full opacity-0'
+          }`}>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               {title}
             </h1>
@@ -46,8 +62,12 @@ export default function Hero({
             </Link>
           </div>
 
-          {/* Image */}
-          <div className="relative">
+          {/* Image - Slides in from right */}
+          <div className={`relative transition-all duration-1000 ease-out delay-300 ${
+            isLoaded 
+              ? 'translate-x-0 opacity-100' 
+              : 'translate-x-full opacity-0'
+          }`}>
             <div className="relative overflow-hidden rounded-2xl shadow-2xl">
               <img
                 src={imageSrc}
