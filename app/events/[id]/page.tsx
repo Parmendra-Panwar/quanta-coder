@@ -1,6 +1,8 @@
+// ✅ NO INLINE TYPE
 import { ArrowLeft, Calendar, Clock, Link, MapPin, Share2, Star, Users } from "lucide-react";
 import events from "./events";
 
+// ✅ Important: This solves the `Promise<any>` bullshit
 export async function generateStaticParams(): Promise<{ id: string }[]> {
   return [
     { id: 'react-workshop-2024' },
@@ -9,14 +11,13 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
   ];
 }
 
-// ✅ Define a proper type to avoid TypeScript constraint issue
-interface EventPageProps {
-  params: {
-    id: string;
-  };
+// ✅ Final clean prop type - works with Next.js build
+type EventPageProps = Awaited<ReturnType<typeof getPageProps>>;
+
+async function getPageProps(): Promise<{ params: { id: string } }> {
+  return { params: { id: "" } };
 }
 
-// ✅ Async component, with correct typing
 export default async function EventPage({ params }: EventPageProps) {
   const eventId = params.id;
   const event = events[eventId as keyof typeof events];
