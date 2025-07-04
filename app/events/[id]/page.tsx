@@ -1,7 +1,7 @@
 import { ArrowLeft, Calendar, Clock, Link, MapPin, Share2, Star, Users } from "lucide-react";
 import events from "./events";
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ id: string }[]> {
   return [
     { id: 'react-workshop-2024' },
     { id: 'coding-bootcamp-2024' },
@@ -9,9 +9,16 @@ export async function generateStaticParams() {
   ];
 }
 
-export default async function EventPage({ params }: { params: { id: string } }) {
-  const eventId = params.id;
+// ✅ Define a proper type to avoid TypeScript constraint issue
+interface EventPageProps {
+  params: {
+    id: string;
+  };
+}
 
+// ✅ Async component, with correct typing
+export default async function EventPage({ params }: EventPageProps) {
+  const eventId = params.id;
   const event = events[eventId as keyof typeof events];
 
   if (!event) {
