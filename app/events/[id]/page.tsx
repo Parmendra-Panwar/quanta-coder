@@ -8,11 +8,13 @@ export async function generateStaticParams() {
   ];
 }
 
-interface EventPageProps {
-  params: { id: string };
-}
+type Props = {
+  params: {
+    id: string;
+  };
+};
 
-export default function EventPage({ params }: EventPageProps) {
+export default function EventPage({ params }: Props) {
   const eventId = params.id as string;
 
   // Mock event data - in a real app, this would come from an API or database
