@@ -1,22 +1,7 @@
 import { ArrowLeft, Calendar, Clock, Link, MapPin, Share2, Star, Users } from "lucide-react";
 
-export async function generateStaticParams() {
-  return [
-    { id: 'react-workshop-2024' },
-    { id: 'coding-bootcamp-2024' },
-    { id: 'ai-ml-hackathon-2024' },
-  ];
-}
-
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-export default function EventPage({ params }: Props) {
-  const eventId = params.id as string;
-
+export default async function EventPage({ params }: { params: Promise<{id:string}> }) {
+  const { id: eventId } = await params;
   // Mock event data - in a real app, this would come from an API or database
   const events = {
     'react-workshop-2024': {
