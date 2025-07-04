@@ -1,12 +1,10 @@
 import { ArrowLeft, Calendar, Clock, Link, MapPin, Share2, Star, Users } from "lucide-react";
 import events from "./events";
-// route structure is like http://localhost:3000/events/coding-bootcamp-2024
-// and error is like ⨯ [Error: Page "/events/[slug]/page" is missing exported function "generateStaticParams()", which is required with "output: export" config.] {
-//   page: '/events/coding-bootcamp-2024'
-// }
 
-// ✅ Required for static export (Next.js output: export)
-export async function generateStaticParams() {
+export type Params = {
+  slug: string;
+};
+export async function generateStaticParams(): Promise<Params[]> {
   return [
     { slug: "react-workshop-2024" },
     { slug: "coding-bootcamp-2024" },
@@ -14,12 +12,7 @@ export async function generateStaticParams() {
   ];
 }
 
-// ✅ Params is NOT a Promise – remove "await" and fix type
-export default async function EventPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function EventPage({ params }: { params: Params }) {
   const eventId = params.slug;
   const event = events[eventId as keyof typeof events];
 
