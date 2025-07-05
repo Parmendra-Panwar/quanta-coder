@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X, Code2 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,9 +22,16 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group">
-            <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg group-hover:scale-105 transition-transform">
-              <Code2 className="w-6 h-6 text-white" />
-            </div>
+            {/* <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg group-hover:scale-105 transition-transform"> */}
+              {/* <Code2 className="w-6 h-6 text-white" /> */}
+              <Image 
+                src="image/images.png"
+                alt="Quanta Crew Logo"
+                width={62}
+                height={62}
+                className="h-15 w-15 rounded-full object-cover transition-transform transform group-hover:scale-105"
+              />
+            {/* </div> */}
             <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Quanta Crew
             </span>
@@ -64,7 +72,7 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="py-4 border-t border-gray-200">
             <nav className="flex flex-col space-y-4">

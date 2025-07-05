@@ -8,6 +8,9 @@ export default function CTA() {
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
           Ready to Start Your Coding Journey?
         </h2>
+        <h3 className="text-xl md:text-2xl font-bold mb-4">
+          We inspire students to fall in love with programming..!
+        </h3>
         <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
           Join our community of passionate developers and take your programming skills to the next level.
         </p>

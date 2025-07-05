@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Code2, Mail, Github, Linkedin, Twitter } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -9,9 +10,16 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">
+              {/* <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">
                 <Code2 className="w-6 h-6 text-white" />
-              </div>
+              </div> */}
+              <Image
+                src="image/images.png"
+                alt="Quanta Crew Logo"
+                width={45}
+                height={45}
+                className="h-15 w-15 rounded-full object-cover transition-transform transform group-hover:scale-105"
+              />
               <span className="text-xl font-bold">Quanta Crew</span>
             </Link>
             <p className="text-gray-400 mb-4 max-w-md">
@@ -49,9 +57,9 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact</h3>
             <ul className="space-y-2 text-gray-400">
-              <li>Email: info@quantacrew.com</li>
-              <li>Phone: +1 (555) 123-4567</li>
-              <li>Location: Your College Campus</li>
+              <li>Email: theengineerparas@gmail.com</li>
+              <li>Phone: not available</li>
+              <li>Location: Technocrats Institute of Technology Science</li>
             </ul>
           </div>
         </div>
